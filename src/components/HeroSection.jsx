@@ -40,7 +40,8 @@ export default function HeroSection({ showBackToOffice = false }) {
     }
   }, [submitStatus]);
 
-  const successMessage = "Tack! Du kommer att få ett mail från oss inom kort.";
+  const successMessage =
+    "Tack för att du registrerade dig! Vi kommer snart att välkomna dig till Stilify-plattformen, där modekläder får en helt ny betydelse";
   const errorMessage =
     "E-postadressen är redan registrerad. Försök med en annan.";
 
