@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import Modal from "./Modal";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
   resetSubmitState,
@@ -39,17 +40,9 @@ export default function HeroSection({ showBackToOffice = false }) {
     }
   }, [submitStatus]);
 
-  useEffect(() => {
-    if (submitStatus === "succeeded" || submitStatus === "failed") {
-      const timeout = setTimeout(() => {
-        dispatch(resetSubmitState());
-      }, 4000);
-
-      return () => clearTimeout(timeout);
-    }
-
-    return undefined;
-  }, [submitStatus, dispatch]);
+  const successMessage = "Tack! Du kommer att få ett mail från oss inom kort.";
+  const errorMessage =
+    "E-postadressen är redan registrerad. Försök med en annan.";
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -61,9 +54,13 @@ export default function HeroSection({ showBackToOffice = false }) {
     dispatch(submitSubscriber({ email }));
   };
 
+  const handleCloseModal = () => {
+    dispatch(resetSubmitState());
+  };
+
   return (
     <div className="relative w-full -mx-[calc((100vw-100%)/2)] overflow-hidden">
-  <div className="relative w-full min-h-screen">
+      <div className="relative w-full min-h-screen">
         <div className="flex absolute inset-0 w-full h-full overflow-hidden backdrop-brightness-110">
           <Image
             src="/assets/hero-banner.png"
@@ -130,15 +127,17 @@ export default function HeroSection({ showBackToOffice = false }) {
                 </button>
               </form>
 
-              {(submitMessage || submitError) && (
-                <p
-                  className={`text-sm sm:text-base ${
-                    submitError ? "text-red-200" : "text-green-200"
-                  }`}
-                >
-                  {submitError || submitMessage}
-                </p>
-              )}
+              <Modal
+                message={
+                  submitStatus === "succeeded"
+                    ? successMessage
+                    : submitStatus === "failed"
+                    ? errorMessage
+                    : ""
+                }
+                onClose={handleCloseModal}
+                isError={submitStatus === "failed"}
+              />
             </div>
 
             <div className="mt-6 sm:mt-7 flex items-center justify-center gap-2.5 sm:gap-3.5">

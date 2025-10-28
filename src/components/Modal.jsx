@@ -22,18 +22,18 @@ export default function Modal({ message, onClose, isError }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 p-4 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-[#00000032] bg-opacity-5 p-4 backdrop-blur-sm"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
     >
       <div
-        className="relative w-full max-w-sm rounded-2xl bg-zinc-50 p-8 shadow-2xl"
+        className="relative w-full max-w-sm rounded-2xl border border-white/20 bg-white/10 p-8 shadow-2xl backdrop-blur-lg"
         onClick={(e) => e.stopPropagation()}
       >
         <p
           className={`text-center text-lg font-medium ${
-            isError ? "text-red-600" : "text-zinc-900"
+            isError ? "text-red-300" : "text-white"
           }`}
         >
           {message}
