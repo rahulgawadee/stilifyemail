@@ -5,13 +5,6 @@
   --foreground: #171717;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
@@ -23,4 +16,38 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+input::placeholder {
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+}
+
+.field {
+  height: clamp(42px, 4.8vw, 48px);
+  border-width: 1px;
+  transition: all 0.2s ease;
+}
+
+.field:focus {
+  border-color: rgba(255, 255, 255, 0.95);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(197, 93, 232, 0.1);
+}
+
+.hero-title {
+  font-size: clamp(22px, 4.4vw, 52px);
+  line-height: 1.05;
+}
+
+.hero-sub {
+  font-size: clamp(13px, 1.6vw, 16px);
+}
+
+.btn-cta {
+  height: clamp(40px, 4.6vw, 46px);
+}
+
+.text-balance {
+  text-wrap: balance;
 }
