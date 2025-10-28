@@ -9,6 +9,8 @@ const initialState = {
   submitStatus: "idle",
   submitError: null,
   submitMessage: null,
+  deleteStatus: "idle",
+  deleteError: null,
 };
 
 export const submitSubscriber = createAsyncThunk(
@@ -56,6 +58,30 @@ export const fetchSubscribers = createAsyncThunk(
   }
 );
 
+export const deleteSubscriber = createAsyncThunk(
+  "subscribers/delete",
+  async ({ id }, { rejectWithValue }) => {
+    try {
+      const response = await fetch("/api/subscribers", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ id }),
+      });
+
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        return rejectWithValue(data.message || "Kunde inte ta bort e-postadressen.");
+      }
+
+      return { id };
+    } catch (error) {
+      return rejectWithValue("Kunde inte ta bort e-postadressen.");
+    }
+  }
+);
+
 const subscriberSlice = createSlice({
   name: "subscribers",
   initialState,
@@ -64,6 +90,10 @@ const subscriberSlice = createSlice({
       state.submitStatus = "idle";
       state.submitError = null;
       state.submitMessage = null;
+    },
+    resetDeleteState(state) {
+      state.deleteStatus = "idle";
+      state.deleteError = null;
     },
   },
   extraReducers: (builder) => {
@@ -92,10 +122,22 @@ const subscriberSlice = createSlice({
       .addCase(fetchSubscribers.rejected, (state, action) => {
         state.fetchStatus = "failed";
         state.fetchError = action.payload || "Kunde inte hämta listan.";
+      })
+      .addCase(deleteSubscriber.pending, (state) => {
+        state.deleteStatus = "loading";
+        state.deleteError = null;
+      })
+      .addCase(deleteSubscriber.fulfilled, (state, action) => {
+        state.deleteStatus = "succeeded";
+        state.items = state.items.filter((item) => item.id !== action.payload.id);
+      })
+      .addCase(deleteSubscriber.rejected, (state, action) => {
+        state.deleteStatus = "failed";
+        state.deleteError = action.payload || "Kunde inte ta bort e-postadressen.";
       });
   },
 });
 
-export const { resetSubmitState } = subscriberSlice.actions;
+export const { resetSubmitState, resetDeleteState } = subscriberSlice.actions;
 
 export default subscriberSlice.reducer;

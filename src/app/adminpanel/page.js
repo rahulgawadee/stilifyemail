@@ -9,13 +9,14 @@ import {
   Shield,
   User,
   KeyRound,
+  Trash2,
 } from "lucide-react";
 import {
   login,
   logout,
   setAuthenticated,
 } from "@/store/slices/authSlice";
-import { fetchSubscribers } from "@/store/slices/subscriberSlice";
+import { fetchSubscribers, deleteSubscriber } from "@/store/slices/subscriberSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 
 export default function AdminPanel() {
@@ -24,6 +25,7 @@ export default function AdminPanel() {
   const subscribersState = useAppSelector((state) => state.subscribers);
   const [form, setForm] = useState({ username: "", password: "" });
   const [bootstrapChecked, setBootstrapChecked] = useState(false);
+  const [deletingId, setDeletingId] = useState(null);
 
   useEffect(() => {
     if (bootstrapChecked) {
@@ -68,8 +70,28 @@ export default function AdminPanel() {
   };
 
   const handleLogout = async () => {
-    await dispatch(logout());
-    dispatch(setAuthenticated(false));
+    try {
+      await dispatch(logout()).unwrap();
+    } catch (error) {
+      // Handle error silently or show message
+    } finally {
+      dispatch(setAuthenticated(false));
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (!confirm("Är du säker på att du vill ta bort denna e-postadress?")) {
+      return;
+    }
+
+    setDeletingId(id);
+    try {
+      await dispatch(deleteSubscriber({ id })).unwrap();
+    } catch (error) {
+      alert(error || "Kunde inte ta bort e-postadressen.");
+    } finally {
+      setDeletingId(null);
+    }
   };
 
   const formattedSubscribers = useMemo(() => {
@@ -91,7 +113,7 @@ export default function AdminPanel() {
               <Shield size={28} className="text-white/80" />
             </div>
             <h1 className="text-2xl font-semibold text-center">
-              Stilify Adminpanel
+              Stilify Administratörspanel
             </h1>
           </div>
           <form className="flex flex-col gap-4" onSubmit={handleLogin}>
@@ -173,7 +195,7 @@ export default function AdminPanel() {
           </div>
           <button
             type="button"
-            className="self-start flex items-center gap-2 rounded-full border border-white/20 px-5 py-2.5 text-sm font-medium text-white/80 transition-colors hover:border-white hover:text-white"
+            className="flex items-center gap-2 rounded-full border border-white/20 px-5 py-2.5 text-sm font-medium text-white/80 transition-colors hover:border-white hover:text-white cursor-pointer relative z-10"
             onClick={handleLogout}
           >
             <LogOut size={16} />
@@ -220,29 +242,48 @@ export default function AdminPanel() {
               <p>Inga registreringar ännu.</p>
             </div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-left">
-                <thead>
-                  <tr className="border-b border-white/10 text-sm text-white/60">
-                    <th className="px-4 py-3 font-medium">E-postadress</th>
-                    <th className="px-4 py-3 font-medium text-right">
-                      Registreringsdatum
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-white/5">
-                  {formattedSubscribers.map((subscriber) => (
-                    <tr key={subscriber.id}>
-                      <td className="px-4 py-4 font-medium">
-                        {subscriber.email}
-                      </td>
-                      <td className="px-4 py-4 text-right text-white/70">
-                        {subscriber.createdAt}
-                      </td>
+            <div className="overflow-x-auto -mx-6 sm:-mx-8 px-6 sm:px-8">
+              <div className="inline-block min-w-full align-middle">
+                <table className="min-w-full text-left">
+                  <thead>
+                    <tr className="border-b border-white/10 text-sm text-white/60">
+                      <th className="px-3 sm:px-4 py-3 font-medium whitespace-nowrap">E-postadress</th>
+                      <th className="px-3 sm:px-4 py-3 font-medium whitespace-nowrap">
+                        Registreringsdatum
+                      </th>
+                      <th className="px-3 sm:px-4 py-3 font-medium text-right whitespace-nowrap">
+                        Åtgärder
+                      </th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="divide-y divide-white/5">
+                    {formattedSubscribers.map((subscriber) => (
+                      <tr key={subscriber.id}>
+                        <td className="px-3 sm:px-4 py-3 sm:py-4 font-medium text-sm sm:text-base break-all">
+                          {subscriber.email}
+                        </td>
+                        <td className="px-3 sm:px-4 py-3 sm:py-4 text-white/70 text-sm sm:text-base whitespace-nowrap">
+                          {subscriber.createdAt}
+                        </td>
+                        <td className="px-3 sm:px-4 py-3 sm:py-4 text-right">
+                          <button
+                            type="button"
+                            onClick={() => handleDelete(subscriber.id)}
+                            disabled={deletingId === subscriber.id}
+                            className="inline-flex items-center gap-1.5 sm:gap-2 rounded-lg bg-red-500/10 px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium text-red-400 transition-colors hover:bg-red-500/20 disabled:opacity-50 disabled:cursor-not-allowed border border-red-500/20 whitespace-nowrap"
+                            aria-label={`Ta bort ${subscriber.email}`}
+                          >
+                            <Trash2 size={16} className="sm:w-4 sm:h-4" />
+                            <span className="hidden sm:inline">
+                              {deletingId === subscriber.id ? "Tar bort…" : "Ta bort"}
+                            </span>
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           )}
         </section>

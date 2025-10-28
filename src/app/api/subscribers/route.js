@@ -72,3 +72,50 @@ export async function GET() {
     })),
   });
 }
+
+export async function DELETE(request) {
+  const cookieStore = await cookies();
+  const token = cookieStore.get(authCookieName)?.value;
+
+  if (!tokenIsValid(token)) {
+    return NextResponse.json({ message: "Obehörig." }, { status: 401 });
+  }
+
+  let payload;
+
+  try {
+    payload = await request.json();
+  } catch (error) {
+    return NextResponse.json({ message: "Ogiltig JSON-data." }, { status: 400 });
+  }
+
+  const { id } = payload || {};
+
+  if (!id || typeof id !== "string") {
+    return NextResponse.json({ message: "Ett giltigt ID krävs." }, { status: 400 });
+  }
+
+  await connectToDatabase();
+
+  try {
+    const result = await Subscriber.findByIdAndDelete(id);
+
+    if (!result) {
+      return NextResponse.json(
+        { message: "Prenumeranten hittades inte." },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json(
+      { message: "E-postadressen har tagits bort." },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Misslyckades med att ta bort e-postadressen", error);
+    return NextResponse.json(
+      { message: "Något gick fel. Försök igen senare." },
+      { status: 500 }
+    );
+  }
+}

@@ -12,17 +12,17 @@ import {
 const socialLinks = [
   {
     label: "TikTok",
-    href: "#",
+    href: "https://www.tiktok.com/@stilify.se?_t=ZN-90vwySKuVlu&_r=1",
     path: "M20 8.5c-2.3 0-4.2-1.8-4.4-4.1h-2.7v11.1c0 2-1.6 3.6-3.6 3.6S5.7 17.5 5.7 15.6s1.6-3.6 3.6-3.6c.3 0 .6 0 .9.1V9c-.3 0-.6-.1-.9-.1-3.2 0-5.8 2.6-5.8 5.8S6 20.5 9.2 20.5s5.8-2.6 5.8-5.8V8.2c1.2 1.2 2.8 2 4.6 2v-1.7z",
   },
   {
     label: "Facebook",
-    href: "#",
+    href: "https://www.facebook.com/share/1GPUwAHNnd/?mibextid=wwXIfr",
     path: "M13.5 20v-6h2.1l.3-2.4h-2.4V9.7c0-.7.2-1.2 1.2-1.2H16V6.3c-.2 0-.9-.1-1.7-.1-1.7 0-2.8 1-2.8 2.9v1.7H9.4V14h2.1v6h2z",
   },
   {
     label: "Instagram",
-    href: "#",
+    href: "https://www.instagram.com/stilify.se?igsh=Ymh2c3o4djlmMG11&utm_source=qr",
     path: "M7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4zm0 2a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H7zm5 3.2A4.8 4.8 0 1 1 7.2 13 4.8 4.8 0 0 1 12 8.2zm0 2A2.8 2.8 0 1 0 14.8 13 2.8 2.8 0 0 0 12 10.2zM17.5 7a1 1 0 1 1-1 1 1 1 0 0 1 1-1z",
   },
 ];
@@ -87,7 +87,7 @@ export default function HeroSection({ showBackToOffice = false }) {
           <div className="w-full max-w-[900px] text-center">
             <h1 className="hero-title text-balance text-white font-semibold leading-[1.04] tracking-[-0.015em]">
               Snart lanseras Stilify – den
-              <br className="hidden sm:block" />
+              <br />
               nya platsen för mode.
             </h1>
 
@@ -96,13 +96,13 @@ export default function HeroSection({ showBackToOffice = false }) {
               <br className="hidden md:block" />
               second hand och hitta din personliga stil. Signa upp för tidig
               <br className="hidden md:block" />
-              tillgång och bli bland de första att prova Stilify •
+              tillgång och bli bland de första att prova Stilify.
             </p>
 
             <div className="mt-6 sm:mt-7 md:mt-8 flex flex-col items-center justify-center gap-2.5 sm:gap-3.5">
               <form
                 onSubmit={handleSubmit}
-                className="w-full max-w-[720px] mx-auto flex flex-col gap-2"
+                className="w-full max-w-[720px] mx-auto flex flex-col gap-3 sm:gap-2"
               >
                 <label htmlFor="email" className="sr-only">
                   E-post
@@ -141,7 +141,7 @@ export default function HeroSection({ showBackToOffice = false }) {
               />
             </div>
 
-            <div className="mt-6 sm:mt-7 flex items-center justify-center gap-2.5 sm:gap-3.5">
+            <div className="mt-10 sm:mt-6 md:mt-7 flex items-center justify-center gap-2.5 sm:gap-3.5">
               {socialLinks.map((icon) => (
                 <a key={icon.label} href={icon.href} aria-label={icon.label} className="group">
                   <span className="inline-flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/95 text-black shadow-sm group-hover:bg-white transition">
