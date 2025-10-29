@@ -41,7 +41,7 @@ export default function HeroSection({ showBackToOffice = false }) {
   }, [submitStatus]);
 
   const successMessage =
-    "Tack för att du registrerade dig! Vi kommer snart att välkomna dig till Stilify-plattformen, där modekläder får en helt ny betydelse";
+    "Tack för att du gick med! Snart får du tillgång till Stilify – där mode handlar om mer än bara kläder.";
   const errorMessage =
     "E-postadressen är redan registrerad. Försök med en annan.";
 
@@ -92,9 +92,9 @@ export default function HeroSection({ showBackToOffice = false }) {
             </h1>
 
             <p className="hero-sub text-balance text-white/90 mt-4 md:mt-5 leading-relaxed max-w-[760px] mx-auto">
-              Upptäck mode på ett ställe – sök med bild, jämför nytt och
+              Upptäck mode på ett ställe – sök med bild, jämför nytt och{" "}
               <br className="hidden md:block" />
-              second hand och hitta din personliga stil. Signa upp för tidig
+              second hand och hitta din personliga stil. Signa upp för tidig{" "}
               <br className="hidden md:block" />
               tillgång och bli bland de första att prova Stilify.
             </p>
