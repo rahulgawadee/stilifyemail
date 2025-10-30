@@ -242,52 +242,86 @@ export default function AdminPanel() {
               <p>Inga registreringar ännu.</p>
             </div>
           ) : (
-            <div className="overflow-x-auto -mx-6 sm:-mx-8 px-6 sm:px-8">
-              <div className="inline-block min-w-full align-middle">
-                <table className="min-w-full text-left">
-                  <thead>
-                    <tr className="border-b border-white/10 text-sm text-white/60">
-                      <th className="px-3 sm:px-4 py-3 font-medium whitespace-nowrap">E-postadress</th>
-                      <th className="px-3 sm:px-4 py-3 font-medium whitespace-nowrap">
-                        Registreringsdatum
-                      </th>
-                      <th className="px-3 sm:px-4 py-3 font-medium text-right whitespace-nowrap">
-                        Åtgärder
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-white/5">
-                    {formattedSubscribers.map((subscriber) => (
-                      <tr key={subscriber.id}>
-                        <td className="px-3 sm:px-4 py-3 sm:py-4 font-medium text-sm sm:text-base break-all">
+            <>
+              {/* Mobile list view */}
+              <div className="sm:hidden">
+                <ul className="divide-y divide-white/10 rounded-2xl border border-white/10 bg-white/5">
+                  {formattedSubscribers.map((subscriber) => (
+                    <li
+                      key={subscriber.id}
+                      className="p-4 flex items-center justify-between gap-3"
+                    >
+                      <div className="text-left">
+                        <p className="font-medium text-sm break-all">
                           {subscriber.email}
-                        </td>
-                        <td className="px-3 sm:px-4 py-3 sm:py-4 text-white/70 text-sm sm:text-base whitespace-nowrap">
+                        </p>
+                        <p className="text-xs text-white/60 mt-0.5">
                           {subscriber.createdAt}
-                        </td>
-                        <td className="px-3 sm:px-4 py-3 sm:py-4 text-right">
-                          <button
-                            type="button"
-                            onClick={() => handleDelete(subscriber.id)}
-                            disabled={deletingId === subscriber.id}
-                            className="inline-flex items-center gap-1.5 sm:gap-2 rounded-lg bg-red-500/10 px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium text-red-400 transition-colors hover:bg-red-500/20 disabled:opacity-50 disabled:cursor-not-allowed border border-red-500/20 whitespace-nowrap"
-                            aria-label={`Ta bort ${subscriber.email}`}
-                          >
-                            <Trash2 size={16} className="sm:w-4 sm:h-4" />
-                            <span className="hidden sm:inline">
-                              {deletingId === subscriber.id ? "Tar bort…" : "Ta bort"}
-                            </span>
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => handleDelete(subscriber.id)}
+                        disabled={deletingId === subscriber.id}
+                        className="inline-flex items-center justify-center rounded-lg bg-red-500/10 p-2 text-red-400 hover:bg-red-500/20 disabled:opacity-50 disabled:cursor-not-allowed border border-red-500/20"
+                        aria-label={`Ta bort ${subscriber.email}`}
+                      >
+                        <Trash2 size={18} />
+                      </button>
+                    </li>
+                  ))}
+                </ul>
               </div>
-            </div>
+
+              {/* Desktop/tablet table view */}
+              <div className="hidden sm:block overflow-x-auto -mx-8 px-8">
+                <div className="inline-block min-w-full align-middle">
+                  <table className="min-w-full text-left">
+                    <thead>
+                      <tr className="border-b border-white/10 text-sm text-white/60">
+                        <th className="px-4 py-3 font-medium whitespace-nowrap">E-postadress</th>
+                        <th className="px-4 py-3 font-medium whitespace-nowrap">
+                          Registreringsdatum
+                        </th>
+                        <th className="px-4 py-3 font-medium text-right whitespace-nowrap">
+                          Åtgärder
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-white/5">
+                      {formattedSubscribers.map((subscriber) => (
+                        <tr key={subscriber.id}>
+                          <td className="px-4 py-4 font-medium text-base break-all">
+                            {subscriber.email}
+                          </td>
+                          <td className="px-4 py-4 text-white/70 whitespace-nowrap">
+                            {subscriber.createdAt}
+                          </td>
+                          <td className="px-4 py-4 text-right">
+                            <button
+                              type="button"
+                              onClick={() => handleDelete(subscriber.id)}
+                              disabled={deletingId === subscriber.id}
+                              className="inline-flex items-center gap-2 rounded-lg bg-red-500/10 px-3 py-2 text-sm font-medium text-red-400 transition-colors hover:bg-red-500/20 disabled:opacity-50 disabled:cursor-not-allowed border border-red-500/20 whitespace-nowrap"
+                              aria-label={`Ta bort ${subscriber.email}`}
+                            >
+                              <Trash2 size={16} className="w-4 h-4" />
+                              <span>
+                                {deletingId === subscriber.id ? "Tar bort…" : "Ta bort"}
+                              </span>
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </>
           )}
         </section>
       </div>
     </main>
   );
 }
+
